@@ -46,7 +46,7 @@ services:
     volumes:
       - /srv/apps/nginx:/etc/nginx
     ports:
-      - "8080:80"
+      - "8001:80"
 
   lamp_mariadb:
     image: mariadb:latest
@@ -57,7 +57,7 @@ services:
     image: phpmyadmin:latest
     restart: always
     ports:
-      - 8080:80
+      - 8002:80
     environment:
       - PMA_ARBITRARY=lamp_mariadb
 
