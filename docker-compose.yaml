@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+#REVERSE PROXY (NGINX-PROXY-MANAGER)
+  reverse_proxy_app:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: reverse-proxy-app
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - /srv/apps/reverse_proxy/app/config.json:/app/config/production.json
+      - /srv/apps/reverse_proxy/app/data:/data
+      - /srv/apps/reverse_proxy/app/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - reverse_proxy_db
+
+  reverse_proxy_db:
+    image: yobasystems/alpine-mariadb:latest
+    container_name: reverse-proxy-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpass"
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "passwd"
+    volumes:
+      - /srv/apps/reverse_proxy/db/mysql:/var/lib/mysql
+
+#OPENVPN
+  openvpn:
+    image: kylemanna/openvpn:latest
+    container_name: openvpn
+    restart: always
+    ports:
+        - 1194:1194/udp
+    volumes:
+        - /srv/apps/openvpn/data:/etc/openvpn
+    cap_add:
+        - NET_ADMIN
+
+#LAMP
