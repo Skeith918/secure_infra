@@ -77,6 +77,33 @@ main_menu
 #docker-compose up -d
 
 function main_menu(){
+trap "echo 'Control-C cannot been used now >:) ' ; sleep 1 ; clear ; continue " 1 2 3
 
+while true
+do
+	clear
+	echo "\t SECURE INFRASTRUCTURE INSTALLATION
+	\t 1 -- \t 1
+	\t 2 -- \t 2
+	\t 3 -- \t 3
+	\t Q -- \t QUIT (Leave this menu program)
+	\t Type an option
+	\t And type RETURN to back to main menu\c"
 
+	read answer
+	clear
+
+	case "$answer" in
+		[1]*) 1;;
+		[2]*) 2;;
+		[3]*) 3;;
+
+		[Qq]*)  echo "See you soon..." ; exit 0 ;;
+		*)      echo "Please choose an option..." ;;
+	esac
+	echo ""
+	echo "type RETURN to back to main menu"
+	read dummy
+done
 }
+main_menu
