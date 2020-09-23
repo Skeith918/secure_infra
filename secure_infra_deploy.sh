@@ -81,29 +81,36 @@ trap "echo 'Control-C cannot been used now >:) ' ; sleep 1 ; clear ; continue " 
 
 while true
 do
-	clear
-	echo "\t SECURE INFRASTRUCTURE INSTALLATION
-	\t 1 -- \t 1
-	\t 2 -- \t 2
-	\t 3 -- \t 3
-	\t Q -- \t QUIT (Leave this menu program)
-	\t Type an option
-	\t And type RETURN to back to main menu\c"
+  clear
+  echo "
+---------- SECURE INFRASTRUCTURE INSTALLATION ----------
+1 --> Install Docker (required)
+2 --> Install Reverse Proxy
+3 --> Install OpenVPN Server
+4 --> Configure PortKnocking
+5 --> Install LAMP
+6 --> Install OpenLDAP/Radius
+Q --> QUIT (Leave this menu program)
 
-	read answer
-	clear
+Type an option
+And type RETURN to back to main menu\c"
 
-	case "$answer" in
-		[1]*) 1;;
-		[2]*) 2;;
-		[3]*) 3;;
+  read answer
+  clear
 
-		[Qq]*)  echo "See you soon..." ; exit 0 ;;
-		*)      echo "Please choose an option..." ;;
-	esac
-	echo ""
-	echo "type RETURN to back to main menu"
-	read dummy
+  case "$answer" in
+    [1]*) install_docker;;
+    [2]*) install_reverse;;
+    [3]*) install_openvpn;;
+    [4]*) install_pknocking;;
+    [5]*) install_lamp;;
+    [6]*) install_ldap;;
+    [Qq]*)  echo "See you soon..." ; exit 0 ;;
+  *)      echo "Please choose an option..." ;;
+  esac
+  echo ""
+  echo "type RETURN to back to main menu"
+  read dummy
 done
 }
 main_menu
