@@ -20,7 +20,8 @@ usermod -aG docker $USER
 ## CONFIGURE OPENVPN CONTAINER
 
 ip=$(hostname -I | awk {print'$1'})
-clientname=
+read -e -i "$vpnclientname" -s -p "vpn username : " input
+vpnclientname="${input:-$vpnclientname}"
 
 docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u tcp://$ip
 docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn ovpn_init pki
