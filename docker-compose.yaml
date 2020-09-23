@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-#REVERSE PROXY (NGINX-PROXY-MANAGER)
+## REVERSE PROXY (NGINX-PROXY-MANAGER)
   reverse_proxy_app:
     image: jc21/nginx-proxy-manager:latest
     container_name: reverse-proxy-app
@@ -21,14 +21,14 @@ services:
     container_name: reverse-proxy-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "rootpass"
+      MYSQL_ROOT_PASSWORD: "npmrootpass"
       MYSQL_DATABASE: "npm"
       MYSQL_USER: "npm"
-      MYSQL_PASSWORD: "passwd"
+      MYSQL_PASSWORD: "npmpass"
     volumes:
       - /srv/apps/reverse_proxy/db/mysql:/var/lib/mysql
 
-#OPENVPN
+## OPENVPN
   openvpn:
     image: kylemanna/openvpn:latest
     container_name: openvpn
@@ -40,7 +40,7 @@ services:
     cap_add:
       - NET_ADMIN
 
-#LAMP
+## LAMP
   lamp_nginx:
     image: nginx:latest
     volumes:
@@ -61,4 +61,9 @@ services:
     environment:
       - PMA_ARBITRARY=lamp_mariadb
 
+## OPENLDAP
+  ldap_server:
+    
 
+
+## RADIUS
