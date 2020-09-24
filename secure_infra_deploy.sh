@@ -40,6 +40,27 @@ function check_config_file (){
     pause
   fi
 }
+## CHECK IF INPUT PACKAGE IS INSTALLED
+function check_pkg(){
+  check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
+  if [[ $check = "ii" ]]; then
+    echo $1 "package is already installed"
+  else
+    echo $1 "package doesn't installed, please install this one first"
+    pause
+fi
+}
+
+## PAUSE FUNCTION
+function pause(){
+  read -s -n 1 -p "Press any key to continue..."
+  echo ""
+}
+
+function mapping_port(){
+  check_config_file
+
+}
 
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
 function docker_install () {
@@ -140,28 +161,6 @@ function ldap_radius(){
   echo "wip"
   pause
   main_menu
-}
-
-## CHECK IF INPUT PACKAGE IS INSTALLED
-function check_pkg(){
-  check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
-  if [[ $check = "ii" ]]; then
-    echo $1 "package already installed"
-  else
-    echo $1 "package doesn't installed, please install this one first"
-    pause
-fi
-}
-
-## PAUSE FUNCTION
-function pause(){
-  read -s -n 1 -p "Press any key to continue..."
-  echo ""
-}
-
-function mapping_port(){
-  check_config_file
-  
 }
 
 ## MAIN MENU
