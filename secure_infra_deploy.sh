@@ -38,6 +38,8 @@ main_menu
 function reverse_proxy (){
 check_pkg docker
 
+ip=$(hostname -I | awk {print'$1'})
+
 read -e -i "$npmhttpp" -s -p "set npm http exposed port: " input
 rootpasswd="${input:-$npmhttpp}"
 
@@ -65,6 +67,9 @@ sed -i "s/npmpass/$npmpasswd/g" docker-compose.yaml
 docker-compose up -d reverse_proxy_db
 docker-compose up -d reverse_proxy_app
 
+echo "Your admin interface is deployed on http://"$ip":"$npmadminp
+echo "default login are : admin@example.com / changeme"
+
 main_menu
 }
 
@@ -84,9 +89,23 @@ docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kyleman
 main_menu
 }
 
-## DEPLOY CONTAINERS
+function pknocking(){
+echo "wip"
+pause
+main_menu
+}
 
-#docker-compose up -d
+function lamp(){
+echo "wip"
+pause
+main_menu
+}
+
+function ldap_radius(){
+echo "wip"
+pause
+main_menu
+}
 
 function check_pkg(){
 check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
@@ -94,12 +113,13 @@ if [[ $check = "ii" ]]; then
   echo $1 "package already installed"
 else
   echo $1 "package doesn't installed, please install this one first"
+  pause
   main_menu
 fi
 }
 
 function pause(){
- read -s -n 1 -p "Press any key to continue . . ."
+ read -s -n 1 -p "Press any key to continue..."
  echo ""
 }
 
@@ -126,11 +146,11 @@ And type RETURN to back to main menu\c"
 
   case "$answer" in
     [1]*) docker_install;;
-    [2]*) install_reverse;;
-    [3]*) install_openvpn;;
-    [4]*) install_pknocking;;
-    [5]*) install_lamp;;
-    [6]*) install_ldap;;
+    [2]*) reverse_proxy;;
+    [3]*) openvpn;;
+    [4]*) pknocking;;
+    [5]*) lamp;;
+    [6]*) ldap_radius;;
     [Qq]*)  echo "See you soon..." ; exit 0 ;;
   *)      echo "Please choose an option..." ;;
   esac
