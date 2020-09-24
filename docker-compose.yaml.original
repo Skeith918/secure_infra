@@ -41,27 +41,27 @@ services:
       - NET_ADMIN
 
 ## LAMP
-  lamp_nginx:
-    image: nginx:latest
-    volumes:
-      - /srv/apps/nginx:/etc/nginx
-    ports:
-      - '8001:80'
+  #lamp_nginx:
+  #  image: nginx:latest
+  #  volumes:
+  #    - /srv/apps/nginx:/etc/nginx
+  #  ports:
+  #    - '8001:80'
 
-  lamp_mariadb:
-    image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: example
+  #lamp_mariadb:
+  #  image: mariadb:latest
+  #  environment:
+  #    MYSQL_ROOT_PASSWORD: example
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    restart: always
-    ports:
-      - '8002:80'
-    environment:
-      PMA_ARBITRARY=lamp_mariadb
+  #phpmyadmin:
+  #  image: phpmyadmin:latest
+  #  restart: always
+  #  ports:
+  #    - '8002:80'
+  #  environment:
+  #    PMA_ARBITRARY=lamp_mariadb
 
 ## OPENLDAP
-  ldap_server:
+  #ldap_server:
 
 ## RADIUS
