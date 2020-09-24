@@ -6,9 +6,9 @@ services:
     container_name: reverse-proxy-app
     restart: always
     ports:
-      - 'll:80'
-      - ':443'
-      - ':81'
+      - 'npm_http_port:80'
+      - 'npm_https_port:443'
+      - 'npm_admin_port:81'
     volumes:
       - /srv/apps/reverse_proxy/config.json:/app/config/production.json
       - /srv/apps/reverse_proxy/data:/data
@@ -21,10 +21,10 @@ services:
     container_name: reverse-proxy-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: "npmrootpass"
       MYSQL_DATABASE: "npm"
       MYSQL_USER: "npm"
-      MYSQL_PASSWORD: "test"
+      MYSQL_PASSWORD: "npmpass"
     volumes:
       - /srv/apps/reverse_proxy/mysql:/var/lib/mysql
 

@@ -5,13 +5,40 @@ function check_apps_dir (){
   for i in 'openvpn' 'reverse_proxy' 'openldap' 'lamp'
   do
     if [ -d "/srv/apps/"$i ];then
-      echo"config directory for "$i"already exist"
+      echo "config directory for "$i"already exist"
     else
       echo "create "$i" config directory"
       mkdir -p /srv/apps/$i
     fi
   done
-  main_menu
+}
+
+## CHECK IF CONTAINER CONFIG FILE ALREADY EXIST
+function check_config_file (){
+  if [ -f "./docker-compose.yaml" ];then
+    while true
+    do
+      read -r -p "Container config file already, overwritten ? [Y/n/cancel]" input
+        case $input in [yY][eE][sS]|[yY])
+          rm -f ./docker-compose.yaml
+          cp ./docker-compose.yaml.original ./docker-compose.yaml
+        break
+        ;;
+	[nN][oO]|[nN])
+	;;
+        [cancel])
+        break
+        ;;
+        *)
+        echo "Please answer yes or no or cancel.."
+        ;;
+        esac
+    done
+  else
+    echo "config file doesn't exist, copy original file..."
+    cp ./docker-compose.yaml.original ./docker-compose.yaml
+    pause
+  fi
 }
 
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
@@ -170,6 +197,6 @@ And type RETURN to back to main menu\c"
     read dummy
   done
 }
-echo "checking apps config directory..."
 check_apps_dir
+check_config_file
 main_menu
