@@ -36,20 +36,15 @@ function reverse_proxy (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
-  read -e -i "$npmhttpp" -s -p "set npm http exposed port: " input
-  npmhttpp="${input:-$npmhttpp}"
-  read -e -i "$npmhttpsp" -s -p "set npm https exposed port: " input
-  npmhttpsp="${input:-$npmhttpsp}"
-  read -e -i "$npmadminp" -s -p "set npm admin exposed port: " input
-  npmadminp="${input:-$npmadminp}"
-  read -e -i "$rootpasswd" -s -p "Set npm DB root password: " input
-  rootpasswd="${input:-$npmrootpasswd}"
-  read -e -i "$npmpasswd" -s -p "Set npm DB user password: " input
-  npmpasswd="${input:-$npmpasswd}"
+  read -r -p "set npm http exposed port: " npmhttpp
+  read -r -p "set npm https exposed port: " npmhttpsp
+  read -r -p "set npm admin exposed port: " npmadminp
+  read -s -p "Set npm DB root password: " npmrootpasswd
+  read -s -p "Set npm DB user password: " npmpasswd
 
   ### SET PASS AND PORTS ON CONFIG FILE
   sed -i "s/npm_psswd/$npmpasswd/g" ./reverse_proxy/config.json
-  cp ./reverse_proxy/config.json /srv/apps/reverse_proxy_app/config.json
+  cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
   sed -i "s/npm_http_port/$npmhttpp/g" docker-compose.yaml
   sed -i "s/npm_https_port/$npmhttpsp/g" docker-compose.yaml
   sed -i "s/npm_admin_port/$npmadminp/g" docker-compose.yaml
@@ -73,9 +68,9 @@ function openvpn (){
 
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
   ip=$(hostname -I | awk {print'$1'})
-  read -e -i "$vpnclientname" -s -p "vpn username : " input
+  read -r "$vpnclientname" -p "vpn username : " input
   vpnclientname="${input:-$vpnclientname}"
-  read -e -i "$openvpnp" -s -p "set openvpn exposed port: " input
+  read -r "$openvpnp" -p "set openvpn exposed port: " input
   openvpnp="${input:-$openvpnp}"
 
   ### SET PORT ON CONFIG FILE
@@ -104,7 +99,7 @@ function pknocking(){
 
 ## INSTALL LAMP INFRASTRUCTURE
 function lamp(){
-  read -e -i "$nginxp" -s -p "set nginx exposed port: " input
+  read -r "$nginxp" -p "set nginx exposed port: " input
   nginxp="${input:-$nginxp}"
 
   docker-compose up -d lamp_nginx

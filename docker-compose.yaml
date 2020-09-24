@@ -6,13 +6,13 @@ services:
     container_name: reverse-proxy-app
     restart: always
     ports:
-      - 'npm_http_port:80'
-      - 'npm_https_port:443'
-      - 'npm_admin_port:81'
+      - 'll:80'
+      - ':443'
+      - ':81'
     volumes:
-      - /srv/apps/reverse_proxy/app/config.json:/app/config/production.json
-      - /srv/apps/reverse_proxy/app/data:/data
-      - /srv/apps/reverse_proxy/app/letsencrypt:/etc/letsencrypt
+      - /srv/apps/reverse_proxy/config.json:/app/config/production.json
+      - /srv/apps/reverse_proxy/data:/data
+      - /srv/apps/reverse_proxy/letsencrypt:/etc/letsencrypt
     depends_on:
       - reverse_proxy_db
 
@@ -21,12 +21,12 @@ services:
     container_name: reverse-proxy-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "npmrootpass"
+      MYSQL_ROOT_PASSWORD: ""
       MYSQL_DATABASE: "npm"
       MYSQL_USER: "npm"
-      MYSQL_PASSWORD: "npmpass"
+      MYSQL_PASSWORD: "test"
     volumes:
-      - /srv/apps/reverse_proxy/db/mysql:/var/lib/mysql
+      - /srv/apps/reverse_proxy/mysql:/var/lib/mysql
 
 ## OPENVPN
   openvpn:
