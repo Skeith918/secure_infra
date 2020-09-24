@@ -18,6 +18,7 @@ main_menu
 ## ENSURE DOCKER AND DOCKER-COMPOSE IS INSTALLED
 
 function docker_install (){
+check_pkg docker
 
 echo "installing docker dependencies"
 apt install git curl apt-transport-https ca-certificates libffi-dev libssl-dev python3 python3-pip -y
