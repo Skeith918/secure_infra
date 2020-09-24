@@ -161,17 +161,15 @@ function pause(){
 ## MAIN MENU
 function xmenu(){
   ### DISABLE CTRL-C FEATURE
-  trap "echo 'Control-C cannot been used now >:) ' ; sleep 1 ; clear ; continue " 1 2 3
   INPUT=/tmp/menu.sh.$$
 
   while true
   do
     dialog --clear  --help-button --backtitle "Docker Secure Infrastructure" \
     --title "[ M A I N - M E N U ]" \
-    --menu "You can use the UP/DOWN arrow keys, the first \n\
-    letter of the choice as a hot key, or the \n\
-    number keys 1-9 to choose an option.\n\
-    Choose the TASK" 15 50 4 \
+    --menu "You can use the UP/DOWN arrow keys,or the \n\
+number keys 1-9 to choose an option.\n\
+Choose the TASK" 15 50 4 \
     1 "Install Docker 'required" \
     2 "Install Reverse_Proxy" \
     3 "Install OpenVPN Server" \
