@@ -51,7 +51,7 @@ services:
   lamp_mariadb:
     image: mariadb:latest
       environment:
-        - MYSQL_ROOT_PASSWORD: example
+        MYSQL_ROOT_PASSWORD: example
 
   phpmyadmin:
     image: phpmyadmin:latest
