@@ -37,6 +37,16 @@ main_menu
 
 function reverse_proxy (){
 check_pkg docker
+
+read -e -i "$npmhttpp" -s -p "set npm http exposed port: " input
+rootpasswd="${input:-$npmhttpp}"
+
+read -e -i "$npmhttpsp" -s -p "set npm https exposed port: " input
+rootpasswd="${input:-$npmhttpsp}"
+
+read -e -i "$npmadminp" -s -p "set npm admin exposed port: " input
+rootpasswd="${input:-$npmadminp}"
+
 read -e -i "$rootpasswd" -s -p "Set npm DB root password: " input
 rootpasswd="${input:-$npmrootpasswd}"
 
@@ -45,6 +55,9 @@ npmpasswd="${input:-$npmpasswd}"
 
 cp ./reverse_proxy/config.json /srv/apps/reverse_proxy_app/config.json
 
+sed -i "s/npm_http_port/$npmhttpp/g" docker-compose.yaml
+sed -i "s/npm_https_port/$npmhttpsp/g" docker-compose.yaml
+sed -i "s/npm_admin_port/$npmadminp/g" docker-compose.yaml
 sed -i "s/npm_psswd/$npmpasswd/g" config.json
 sed -i "s/npmrootpass/$npmrootpasswd/g" docker-compose.yaml
 sed -i "s/npmpass/$npmpasswd/g" docker-compose.yaml

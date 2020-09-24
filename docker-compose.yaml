@@ -6,9 +6,9 @@ services:
     container_name: reverse-proxy-app
     restart: always
     ports:
-      - '80:80'
-      - '443:443'
-      - '81:81'
+      - 'npm_http_port:80'
+      - 'npm_https_port:443'
+      - 'npm_admin_port:81'
     volumes:
       - /srv/apps/reverse_proxy/app/config.json:/app/config/production.json
       - /srv/apps/reverse_proxy/app/data:/data
