@@ -159,76 +159,37 @@ function pause(){
 }
 
 ## MAIN MENU
-function main_menu(){
+function xmenu(){
   ### DISABLE CTRL-C FEATURE
   trap "echo 'Control-C cannot been used now >:) ' ; sleep 1 ; clear ; continue " 1 2 3
+  INPUT=/tmp/menu.sh.$$
 
-  ### MAIN MENU LOOP
   while true
   do
-    clear
-    echo "
----------- SECURE INFRASTRUCTURE INSTALLATION ----------
-1 --> Install Docker (required)
-2 --> Install Reverse Proxy
-3 --> Install OpenVPN Server
-4 --> Configure PortKnocking (LAMP required)
-5 --> Install LAMP (with NGINX instead Apache)
-6 --> Install OpenLDAP/Radius
-Q --> QUIT (Leave this menu program)
+    dialog --clear  --help-button --backtitle "Docker Secure Infrastructure" \
+    --title "[ M A I N - M E N U ]" \
+    --menu "You can use the UP/DOWN arrow keys, the first \n\
+    letter of the choice as a hot key, or the \n\
+    number keys 1-9 to choose an option.\n\
+    Choose the TASK" 15 50 4 \
+    1 "Install Docker 'required" \
+    2 "Install Reverse_Proxy" \
+    3 "Install OpenVPN Server" \
+    Exit "Exit to the shell" 2>"${INPUT}"
 
-Type an option
-And type RETURN to back to main menu\c"
-    read answer
-    clear
+    menuitem=$(<"${INPUT}")
 
-    case "$answer" in
-      [1]*) docker_install;;
-      [2]*) reverse_proxy;;
-      [3]*) openvpn;;
-      [4]*) pknocking;;
-      [5]*) lamp;;
-      [6]*) ldap_radius;;
-      [Qq]*)  echo "See you soon..." ; exit 0 ;;
-      *)      echo "Please choose an option..." ;;
-    esac
-    echo ""
-    echo "type RETURN to back to main menu"
-    read dummy
-  done
-}
-
-function xmenu (){
-INPUT=/tmp/menu.sh.$$
-
-while true
-do
-
-dialog --clear  --help-button --backtitle "Docker Secure Infrastructure" \
---title "[ M A I N - M E N U ]" \
---menu "You can use the UP/DOWN arrow keys, the first \n\
-letter of the choice as a hot key, or the \n\
-number keys 1-9 to choose an option.\n\
-Choose the TASK" 15 50 4 \
-1 "Install Docker 'required" \
-2 "Install Reverse_Proxy" \
-3 "Install OpenVPN Server" \
-Exit "Exit to the shell" 2>"${INPUT}"
-
-menuitem=$(<"${INPUT}")
-
-case $menuitem in
+    case $menuitem in
 	1) docker_install;;
 	2) reverse_proxy;;
 	3) openvpn;;
-	Exit) echo "Bye"; break;;
-esac
-
-done
-[ -f $INPUT ] && rm $INPUT
+	Exit) clear;echo "Bye"; break;;
+    esac
+  done
+  [ -f $INPUT ] && rm $INPUT
 }
 check_apps_dir
 check_config_file
+check_pkg dialog
 xmenu
-#main_menu
 
