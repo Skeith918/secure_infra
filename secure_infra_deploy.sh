@@ -1,13 +1,11 @@
 #/bin/bash
 
 ## CREATE APPS CONFIG ROOT DIRECTORY
-echo "checking apps config directory..."
-check_apps_dir
 function check_apps_dir (){
 
 for i in 'openvpn' 'reverse_proxy' 'openldap' 'lamp'
 do
-  if [ -d "/srv/apps/$i" ];then
+  if [ -d "/srv/apps/"$i ];then
     echo"config directory for "$i"already exist"
   else
     echo "create "$i" config directory"
@@ -35,9 +33,10 @@ usermod -aG docker $USER
 main_menu
 }
 
-## CONFIGURE REVERSE_PROXY
+## INSTALL REVERSE_PROXY
 
 function reverse_proxy (){
+check_pkg docker
 read -e -i "$rootpasswd" -s -p "Set npm DB root password: " input
 rootpasswd="${input:-$npmrootpasswd}"
 
@@ -56,10 +55,10 @@ docker-compose up -d reverse_proxy_app
 main_menu
 }
 
-## CONFIGURE OPENVPN CONTAINER
+## INSTALL OPENVPN
 
 function openvpn (){
-
+check_pkg docker
 ip=$(hostname -I | awk {print'$1'})
 read -e -i "$vpnclientname" -s -p "vpn username : " input
 vpnclientname="${input:-$vpnclientname}"
@@ -76,9 +75,23 @@ main_menu
 
 #docker-compose up -d
 
+function check_pkg(){
+check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
+if [[ $check = "ii" ]]; then
+  echo $1 "package already installed"
+else
+  echo $1 "package doesn't installed, please install this one first"
+  main_menu
+fi
+}
+
+function pause(){
+ read -s -n 1 -p "Press any key to continue . . ."
+ echo ""
+}
+
 function main_menu(){
 trap "echo 'Control-C cannot been used now >:) ' ; sleep 1 ; clear ; continue " 1 2 3
-
 while true
 do
   clear
@@ -99,7 +112,7 @@ And type RETURN to back to main menu\c"
   clear
 
   case "$answer" in
-    [1]*) install_docker;;
+    [1]*) docker_install;;
     [2]*) install_reverse;;
     [3]*) install_openvpn;;
     [4]*) install_pknocking;;
@@ -113,4 +126,6 @@ And type RETURN to back to main menu\c"
   read dummy
 done
 }
+echo "checking apps config directory..."
+check_apps_dir
 main_menu
