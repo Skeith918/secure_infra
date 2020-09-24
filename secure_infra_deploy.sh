@@ -16,7 +16,6 @@ main_menu
 }
 
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
-
 function docker_install (){
 
 echo "installing docker dependencies"
@@ -34,7 +33,6 @@ main_menu
 }
 
 ## INSTALL REVERSE_PROXY NGINX-PROXY-MANAGER
-
 function reverse_proxy (){
 check_pkg docker
 
@@ -74,7 +72,6 @@ main_menu
 }
 
 ## INSTALL OPENVPN SERVER
-
 function openvpn (){
 check_pkg docker
 ip=$(hostname -I | awk {print'$1'})
