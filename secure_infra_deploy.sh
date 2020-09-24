@@ -93,16 +93,23 @@ function openvpn (){
 
 ## CONFIGURE PORT KNOCKING WITH LAMP INFRASTRCUTURE
 function pknocking(){
-  echo "wip"
-  pause
-  main_menu
+  check_pkg docker
+  check_lamp=$(docker ps -a | grep nginx | awk pring{print'$6'})
+  if [[ $check = "lamp_nginx" ]]; then
+    echo "OK"
+  else
+    echo "lamp infrastrcuture doesn't exist; please create this one first"
+  fi
 }
 
 ## INSTALL LAMP INFRASTRUCTURE
 function lamp(){
-  read -e -i "$npmadminp" -s -p "set npm admin exposed port: " input
-  npmadminp="${input:-$npmadminp}"
-  pause
+  read -e -i "$nginxp" -s -p "set nginx exposed port: " input
+  nginxp="${input:-$nginxp}"
+
+  docker-compose up -d lamp_nginx
+  docker-compose up -d lamp_mariadb
+  docker-compose up -d lamp_phpmyadmin
 }
 
 ## INSTALL LDAP RADIUS SERVER
