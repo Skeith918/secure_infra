@@ -39,8 +39,8 @@ function reverse_proxy (){
   read -r -p "set npm http exposed port: " npmhttpp
   read -r -p "set npm https exposed port: " npmhttpsp
   read -r -p "set npm admin exposed port: " npmadminp
-  read -s -p "Set npm DB root password: " npmrootpasswd
-  read -s -p "Set npm DB user password: " npmpasswd
+  read -s -r -p "Set npm DB root password: " npmrootpasswd
+  read -s -r -p "Set npm DB user password: " npmpasswd
 
   ### SET PASS AND PORTS ON CONFIG FILE
   sed -i "s/npm_psswd/$npmpasswd/g" ./reverse_proxy/config.json
