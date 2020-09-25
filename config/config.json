@@ -18,7 +18,8 @@
       "portkn2": 8002,
       "portkn3": 8003
     },
-   "openldap_radius"
+   "openldap_radius":
+    {
       "openldap_port": 7001,
       "radius_port": 7002
     }
