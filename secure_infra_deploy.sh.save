@@ -5,101 +5,13 @@ function check_apps_dir (){
   for i in 'openvpn' 'reverse_proxy' 'openldap' 'lamp'
   do
     if [ -d "/srv/apps/"$i ];then
-      echo "config directory for "$i"already exist"
+      echo"config directory for "$i"already exist"
     else
       echo "create "$i" config directory"
       mkdir -p /srv/apps/$i
     fi
   done
-}
-
-## CHECK IF CONTAINER CONFIG FILE ALREADY EXIST
-function check_config_file (){
-  if [ -f "./docker-compose.yaml" ];then
-    while true
-    do
-      read -r -p "Container config file already, overwritten ? [Y/n/cancel]" input
-        case $input in [yY][eE][sS]|[yY])
-          rm -f ./docker-compose.yaml
-          cp ./docker-compose.yaml.original ./docker-compose.yaml
-        break
-        ;;
-	[nN][oO]|[nN])
-	;;
-        [cancel])
-        break
-        ;;
-        *)
-        echo "Please answer yes or no or cancel.."
-        ;;
-        esac
-    done
-  else
-    echo "config file doesn't exist, copy original file..."
-    cp ./docker-compose.yaml.original ./docker-compose.yaml
-    pause
-  fi
-}
-## CHECK IF INPUT PACKAGE IS INSTALLED
-function check_pkg(){
-  check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
-  if [[ $check = "ii" ]]; then
-    echo $1 "package is already installed"
-  else
-    echo $1 "package doesn't installed, please install this one first"
-    pause
-fi
-}
-
-## PAUSE FUNCTION
-function pause(){
-  read -s -n 1 -p "Press any key to continue..."
-  echo ""
-}
-
-function mapping_port(){
-  check_config_file
-  while true
-  do
-    clear
-    echo "
----------- PORTS MAPPING ----------
-1 --> Reverse Proxy
-2 --> OpenVPN
-3 --> PortKnocking
-4 --> Nginx
-5 --> OPENLDAP / RADIUS
-Q --> QUIT (Leave this menu program)
-Type an option
-And type RETURN to back to main menu\c"
-
-  read answer
-  clear
-
-  case "$answer" in
-    [1]*)
-      read -r -p "set reverse_proxy http exposed port: " npmhttpp
-      read -r -p "set reverse_proxy https exposed port: " npmhttpsp
-      read -r -p "set reverse_proxy admin exposed port: " npmadminp
-    ;;
-    [2]*)
-      read -r -p "set openvpn exposed port: " openvpnp
-    ;;
-    [3]*) ;;
-    [4]*)
-
-    ;;
-    [5]*)
-
-    ;;
-    [Qq]*)  echo "See you soon..." ; exit 0 ;;
-  *)      echo "Please choose an option..." ;;
-  esac
-  echo ""
-  echo "type RETURN to back to main menu"
-  read dummy
-done
-
+  main_menu
 }
 
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
@@ -124,12 +36,23 @@ function reverse_proxy (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
-  read -s -r -p "Set npm DB root password: " npmrootpasswd
-  read -s -r -p "Set npm DB user password: " npmpasswd
+  read -r "$npmhttpp" -p "set npm http exposed port: " input
+  npmhttpp="${input:-$npmhttpp}"
+  read -r "$npmhttpsp" -p "set npm https exposed port: " input
+  npmhttpsp="${input:-$npmhttpsp}"
+  read -r "$npmadminp" -p "set npm admin exposed port: " input
+  npmadminp="${input:-$npmadminp}"
+  read -e -i "$rootpasswd" -s -p "Set npm DB root password: " input
+  rootpasswd="${input:-$npmrootpasswd}"
+  read -e -i "$npmpasswd" -s -p "Set npm DB user password: " input
+  npmpasswd="${input:-$npmpasswd}"
 
   ### SET PASS AND PORTS ON CONFIG FILE
   sed -i "s/npm_psswd/$npmpasswd/g" ./reverse_proxy/config.json
-  cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
+  cp ./reverse_proxy/config.json /srv/apps/reverse_proxy_app/config.json
+  sed -i "s/npm_http_port/$npmhttpp/g" docker-compose.yaml
+  sed -i "s/npm_https_port/$npmhttpsp/g" docker-compose.yaml
+  sed -i "s/npm_admin_port/$npmadminp/g" docker-compose.yaml
   sed -i "s/npmrootpass/$npmrootpasswd/g" docker-compose.yaml
   sed -i "s/npmpass/$npmpasswd/g" docker-compose.yaml
 
@@ -141,7 +64,6 @@ function reverse_proxy (){
   ip=$(hostname -I | awk {print'$1'})
   echo "Your admin interface is deployed on http://"$ip":"$npmadminp
   echo "default login are : admin@example.com / changeme"
-  pause
 }
 
 ## INSTALL OPENVPN SERVER
@@ -153,6 +75,8 @@ function openvpn (){
   ip=$(hostname -I | awk {print'$1'})
   read -r "$vpnclientname" -p "vpn username : " input
   vpnclientname="${input:-$vpnclientname}"
+  read -r "$openvpnp" -p "set openvpn exposed port: " input
+  openvpnp="${input:-$openvpnp}"
 
   ### SET PORT ON CONFIG FILE
   sed -i "s/openvpn_port/$openvpnp/g" docker-compose.yaml
@@ -195,37 +119,62 @@ function ldap_radius(){
   main_menu
 }
 
+## CHECK IF INPUT PACKAGE IS INSTALLED
+function check_pkg(){
+  check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
+  if [[ $check = "ii" ]]; then
+    echo $1 "package already installed"
+  else
+    echo $1 "package doesn't installed, please install this one first"
+    pause
+fi
+}
+
+## PAUSE FUNCTION
+function pause(){
+  read -r -n 1 -p "Press any key to continue..."
+  echo ""
+}
+
 ## MAIN MENU
 function main_menu(){
   ### DISABLE CTRL-C FEATURE
-  INPUT=/tmp/menu.sh.$$
+  trap "echo 'Control-C cannot been used now >:) ' ; sleep 1 ; clear ; continue " 1 2 3
 
+  ### MAIN MENU LOOP
   while true
   do
-    dialog --clear  --help-button --backtitle "Docker Secure Infrastructure" \
-    --title "[ M A I N - M E N U ]" \
-    --menu "You can use the UP/DOWN arrow keys,or the \n\
-number keys 1-9 to choose an option.\n\
-Choose the TASK" 15 50 4 \
-    1 "Mapping ports (set this first)"
-    2 "Install Docker (required)" \
-    3 "Install Reverse_Proxy" \
-    4 "Install OpenVPN Server" \
-    Exit "Exit to the shell" 2>"${INPUT}"
+    clear
+    echo "
+---------- SECURE INFRASTRUCTURE INSTALLATION ----------
+1 --> Install Docker (required)
+2 --> Install Reverse Proxy
+3 --> Install OpenVPN Server
+4 --> Configure PortKnocking (LAMP required)
+5 --> Install LAMP (with NGINX instead Apache)
+6 --> Install OpenLDAP/Radius
+Q --> QUIT (Leave this menu program)
 
-    menuitem=$(<"${INPUT}")
+Type an option
+And type RETURN to back to main menu\c"
+    read answer
+    clear
 
-    case $menuitem in
-	1) mapping_port;;
-	2) docker_install;;
-	3) reverse_proxy;;
-	4) openvpn;;
-	Exit) clear;echo "Bye"; break;;
+    case "$answer" in
+      [1]*) docker_install;;
+      [2]*) reverse_proxy;;
+      [3]*) openvpn;;
+      [4]*) pknocking;;
+      [5]*) lamp;;
+      [6]*) ldap_radius;;
+      [Qq]*)  echo "See you soon..." ; exit 0 ;;
+      *)      echo "Please choose an option..." ;;
     esac
+    echo ""
+    echo "type RETURN to back to main menu"
+    read dummy
   done
-  [ -f $INPUT ] && rm $INPUT
 }
+echo "checking apps config directory..."
 check_apps_dir
-check_pkg dialog
 main_menu
-
