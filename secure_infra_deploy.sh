@@ -57,51 +57,6 @@ function pause(){
   echo ""
 }
 
-function mapping_port(){
-  check_config_file
-  while true
-  do
-    clear
-    echo "
----------- PORTS MAPPING ----------
-1 --> Reverse Proxy
-2 --> OpenVPN
-3 --> PortKnocking
-4 --> Nginx
-5 --> OPENLDAP / RADIUS
-Q --> QUIT (Leave this menu program)
-Type an option
-And type RETURN to back to main menu\c"
-
-  read answer
-  clear
-
-  case "$answer" in
-    [1]*)
-      read -r -p "set reverse_proxy http exposed port: " npmhttpp
-      read -r -p "set reverse_proxy https exposed port: " npmhttpsp
-      read -r -p "set reverse_proxy admin exposed port: " npmadminp
-    ;;
-    [2]*)
-      read -r -p "set openvpn exposed port: " openvpnp
-    ;;
-    [3]*) ;;
-    [4]*)
-
-    ;;
-    [5]*)
-
-    ;;
-    [Qq]*)  echo "See you soon..." ; exit 0 ;;
-  *)      echo "Please choose an option..." ;;
-  esac
-  echo ""
-  echo "type RETURN to back to main menu"
-  read dummy
-done
-
-}
-
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
 function docker_install () {
   echo "installing docker dependencies"
@@ -227,5 +182,5 @@ Choose the TASK" 15 50 4 \
 }
 check_apps_dir
 check_pkg dialog
+check_pkg jq
 main_menu
-
