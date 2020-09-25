@@ -1,0 +1,25 @@
+{
+  "reverse_proxy":
+    {
+      "http_port": 8080,
+      "https_port": 8043,
+      "admin_port": 8081,
+      "dbrootpass": "rootest",
+      "dbadminpass": "npmtest"
+    },
+  "openvpn":
+    {
+      "ovpn_port": 80,
+      "client_username": "test"
+    },
+  "port_knocking":
+    {
+      "portkn1": 8001,
+      "portkn2": 8002,
+      "portkn3": 8003
+    },
+   "openldap_radius"
+      "openldap_port": 7001,
+      "radius_port": 7002
+    }
+}

@@ -188,7 +188,7 @@ function main_menu(){
     --menu "You can use the UP/DOWN arrow keys,or the \n\
 number keys 1-9 to choose an option.\n\
 Choose the TASK" 15 50 4 \
-    1 "Mapping ports (set this first)"
+    1 "Mapping ports (set this first)" \
     2 "Install Docker (required)" \
     3 "Install Reverse_Proxy" \
     4 "Install OpenVPN Server" \
