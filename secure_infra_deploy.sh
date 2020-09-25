@@ -1,6 +1,12 @@
 #/bin/bash
 
 ## CREATE APPS CONFIG ROOT DIRECTORY
+
+function read_param (){
+  port=$(jq '.ports_mapping.$1' ./port_mapping/config.json)
+  return port
+}
+
 function check_apps_dir (){
   for i in 'openvpn' 'reverse_proxy' 'openldap' 'lamp'
   do
@@ -46,7 +52,23 @@ function check_pkg(){
   if [[ $check = "ii" ]]; then
     echo $1 "package is already installed"
   else
-    echo $1 "package doesn't installed, please install this one first"
+    while true
+    do
+      read -r -p $1 "package isn't installed, do you want install this one ? [Y/n/cancel]" input
+        case $input in [yY][eE][sS]|[yY])
+          apt install $1 -y
+        break
+        ;;
+        [nN][oO]|[nN])
+        ;;
+        [cancel])
+        break
+        ;;
+        *)
+        echo "Please answer yes or no or cancel.."
+        ;;
+        esac
+    done
     pause
 fi
 }
@@ -78,13 +100,17 @@ function docker_install () {
 function reverse_proxy (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
+  rphttp=$(read_param rphttpp)
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
   read -s -r -p "Set npm DB root password: " npmrootpasswd
   read -s -r -p "Set npm DB user password: " npmpasswd
 
+  echo "used ports "$rphttp
+
   ### SET PASS AND PORTS ON CONFIG FILE
   sed -i "s/npm_psswd/$npmpasswd/g" ./reverse_proxy/config.json
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
+  sed -i "s/npm_http_port/$rphttp/g" docker-compose.yaml
   sed -i "s/npmrootpass/$npmrootpasswd/g" docker-compose.yaml
   sed -i "s/npmpass/$npmpasswd/g" docker-compose.yaml
 
