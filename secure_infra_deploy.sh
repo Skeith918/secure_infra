@@ -26,7 +26,7 @@ function check_config_file (){
   if [ -f "./docker-compose.yaml" ];then
     while true
     do
-      read -r -p "Container config file already, overwritten ? [Y/n/cancel]" input
+      read -r -p "Container config file already, overwritten ? [Yes/No]" input
         case $input in [yY][eE][sS]|[yY])
           rm -f ./docker-compose.yaml
           cp ./docker-compose.yaml.original ./docker-compose.yaml
@@ -55,7 +55,7 @@ function check_pkg(){
   else
     while true
     do
-      read -r -p $1 "package isn't installed and is needed, do you want install it ? [Y/n/cancel]" input
+      read -r -p $1 "package isn't installed and is needed, do you want install it ? [Yes/No]" input
         case $input in [yY][eE][sS]|[yY])
           apt install $1 -y
         break
