@@ -58,8 +58,7 @@ function set_config (){
   rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
   openvpn_port=$(read_param openvpn ovpn_port)
   openvpn_username=$(read_param openvpn client_username)
-  echo $openvpn_username
-  pause
+
   sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
   sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
   sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
@@ -150,8 +149,8 @@ function openvpn (){
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
   docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u tcp://$ip
   docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn ovpn_init pki
-  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full $openvpn_clientname
-  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient $openvpn_clientname > $openvpn_clientname.ovpn
+  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full $openvpn_username
+  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
 
   pause
   ### CREATE CONTAINER
