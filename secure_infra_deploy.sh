@@ -5,7 +5,7 @@ apt install dialog jq -y
 ## CREATE APPS CONFIG ROOT DIRECTORY
 
 function read_param (){
-  port=$(jq '.ports_mapping.$1' ./port_mapping/config.json)
+  port=$(jq '.$1.$2' ./config/config.json)
   return port
 }
 
@@ -103,11 +103,11 @@ function reverse_proxy (){
   check_pkg docker
 
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
-  rp_http=$(read_param http_port)
-  rp_https=$(read_param https_port)
-  rp_admin=$(read_param admin_port)
-  rp_dbrootpass=$(read_param dbrootpass)
-  rp_dbadminpass=$(read_param dbadminpass)
+  rp_http=$(read_param reverse_proxy http_port)
+  rp_https=$(read_param reverse_proxy https_port)
+  rp_admin=$(read_param reverse_proxy admin_port)
+  rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
+  rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
 
   ### SET PASS AND PORTS ON CONFIG FILE
   sed -i "s/npm_psswd/$rp_adminpass/g" ./reverse_proxy/config.json
