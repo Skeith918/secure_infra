@@ -1,5 +1,8 @@
 #/bin/bash
 
+check_pkg dialog
+check_pkg jq
+
 ## CREATE APPS CONFIG ROOT DIRECTORY
 
 function read_param (){
@@ -204,6 +207,4 @@ Choose the TASK" 15 50 4 \
   [ -f $INPUT ] && rm $INPUT
 }
 check_apps_dir
-check_pkg dialog
-check_pkg jq
 main_menu
