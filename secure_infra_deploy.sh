@@ -207,5 +207,4 @@ Choose the TASK" 15 50 4 \
   [ -f $INPUT ] && rm $INPUT
 }
 check_apps_dir
-check_pkg dialog
 main_menu
