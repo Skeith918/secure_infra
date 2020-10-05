@@ -142,7 +142,7 @@ function reverse_proxy (){
 function openvpn (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
-
+  clear
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
   ip=$(hostname -I | awk {print'$1'})
 
@@ -152,8 +152,10 @@ function openvpn (){
   docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full $openvpn_username
   docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
 
+  pause
   ### CREATE CONTAINER
   docker-compose up -d openvpn
+  pause
 }
 
 ## CONFIGURE PORT KNOCKING WITH LAMP INFRASTRCUTURE
