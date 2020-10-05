@@ -1,6 +1,6 @@
 #/bin/bash
 
-apt install dialog jq -y --quiet
+apt install dialog jq -y
 
 ## CREATE APPS CONFIG ROOT DIRECTORY
 
