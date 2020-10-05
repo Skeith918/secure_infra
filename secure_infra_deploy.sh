@@ -84,6 +84,7 @@ function pause(){
 
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
 function docker_install () {
+  clear
   echo "installing docker dependencies"
   apt install git curl apt-transport-https ca-certificates libffi-dev libssl-dev python3 python3-pip -y -q
   apt-get remove python-configparser -q
@@ -208,4 +209,5 @@ Choose the TASK" 15 50 4 \
   [ -f $INPUT ] && rm $INPUT
 }
 check_apps_dir
+check_config_file
 main_menu
