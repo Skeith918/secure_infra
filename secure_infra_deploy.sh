@@ -178,7 +178,6 @@ function ldap_radius(){
 
 ## MAIN MENU
 function main_menu(){
-  ### DISABLE CTRL-C FEATURE
   INPUT=/tmp/menu.sh.$$
 
   while true
@@ -188,19 +187,17 @@ function main_menu(){
     --menu "You can use the UP/DOWN arrow keys,or the \n\
 number keys 1-9 to choose an option.\n\
 Choose the TASK" 15 50 4 \
-    1 "Mapping ports (set this first)" \
-    2 "Install Docker (required)" \
-    3 "Install Reverse_Proxy" \
-    4 "Install OpenVPN Server" \
+    1 "Install Docker (required)" \
+    2 "Install Reverse_Proxy" \
+    3 "Install OpenVPN Server" \
     Exit "Exit to the shell" 2>"${INPUT}"
 
     menuitem=$(<"${INPUT}")
 
     case $menuitem in
-	1) mapping_port;;
-	2) docker_install;;
-	3) reverse_proxy;;
-	4) openvpn;;
+	1) docker_install;;
+	2) reverse_proxy;;
+	3) openvpn;;
 	Exit) clear;echo "Bye"; break;;
     esac
   done
