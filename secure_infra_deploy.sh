@@ -47,7 +47,8 @@ function check_config_file (){
     cp ./docker-compose.yaml.original ./docker-compose.yaml
     pause
   fi
-}-
+}
+
 ## CHECK IF INPUT PACKAGE IS INSTALLED
 function check_pkg(){
   check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
