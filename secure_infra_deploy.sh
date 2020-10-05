@@ -1,7 +1,5 @@
 #/bin/bash
 
-check_pkg dialog
-check_pkg jq
 
 ## CREATE APPS CONFIG ROOT DIRECTORY
 
@@ -103,6 +101,8 @@ function docker_install () {
 function reverse_proxy (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
+  check_pkg jq
+
   rphttp=$(read_param rphttpp)
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
   read -s -r -p "Set npm DB root password: " npmrootpasswd
@@ -207,4 +207,5 @@ Choose the TASK" 15 50 4 \
   [ -f $INPUT ] && rm $INPUT
 }
 check_apps_dir
+check_pkg dialog
 main_menu
