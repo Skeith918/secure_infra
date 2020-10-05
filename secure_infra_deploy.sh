@@ -110,8 +110,8 @@ function reverse_proxy (){
   rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
 
   ### SET PASS AND PORTS ON CONFIG FILE
-  sed -i "s/npm_psswd/$rp_adminpass/g" ./reverse_proxy/config.json
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
+  sed -i "s/npm_psswd/$rp_adminpass/g" /srv/apps/reverse_proxy/config.json
   sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
   sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
   sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml

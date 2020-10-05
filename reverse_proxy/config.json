@@ -4,7 +4,7 @@
     "host": "db",
     "name": "npm",
     "user": "npm",
-    "password": "npm_passwd",
+    "password": npm_passwd,
     "port": 3306
   }
 }
