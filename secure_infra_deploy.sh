@@ -123,11 +123,11 @@ function reverse_proxy (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
 
-  ### SET PASS AND PORTS ON CONFIG FILE
+   ## SET PASS AND PORTS ON CONFIG FILE
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
   sed -i "s/npm_psswd/$rp_adminpass/g" /srv/apps/reverse_proxy/config.json
 
-  ### CREATE CONTAINER
+  ## CREATE CONTAINER
   docker-compose up -d reverse_proxy_db
   docker-compose up -d reverse_proxy_app
 
