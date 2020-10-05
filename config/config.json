@@ -4,13 +4,13 @@
       "http_port": 8080,
       "https_port": 8043,
       "admin_port": 8081,
-      "dbrootpass": "rootest",
-      "dbadminpass": "npmtest"
+      "dbrootpass": rootest,
+      "dbadminpass": npmtest
     },
   "openvpn":
     {
       "ovpn_port": 80,
-      "client_username": "test"
+      "client_username": test
     },
   "port_knocking":
     {
