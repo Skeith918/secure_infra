@@ -33,8 +33,6 @@ function check_config_file (){
         break
         ;;
 	[nN][oO]|[nN])
-	;;
-        [cancel])
         break
         ;;
         *)
@@ -63,8 +61,6 @@ function check_pkg(){
         break
         ;;
         [nN][oO]|[nN])
-        ;;
-        [cancel])
         break
         ;;
         *)
