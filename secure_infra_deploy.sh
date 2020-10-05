@@ -5,7 +5,7 @@ apt install dialog jq -y
 ## CREATE APPS CONFIG ROOT DIRECTORY
 
 function read_param (){
-  port=$(jq '.'$1'.'$2'' ./config/config.json)
+  port=$(jq -r '.'$1'.'$2'' ./config/config.json)
   echo $port
 }
 

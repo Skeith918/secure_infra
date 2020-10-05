@@ -21,10 +21,10 @@ services:
     container_name: reverse-proxy-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: npmrootpass
+      MYSQL_ROOT_PASSWORD: "npmrootpass"
       MYSQL_DATABASE: "npm"
       MYSQL_USER: "npm"
-      MYSQL_PASSWORD: npmpass
+      MYSQL_PASSWORD: "npmpass"
     volumes:
       - /srv/apps/reverse_proxy/mysql:/var/lib/mysql
 
