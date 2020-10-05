@@ -98,22 +98,25 @@ function docker_install () {
 
 ## INSTALL REVERSE_PROXY NGINX-PROXY-MANAGER
 function reverse_proxy (){
+  clear
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
 
-  rphttp=$(read_param rphttpp)
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
-  read -s -r -p "Set npm DB root password: " npmrootpasswd
-  read -s -r -p "Set npm DB user password: " npmpasswd
-
-  echo "used ports "$rphttp
+  rp_http=$(read_param http_port)
+  rp_https=$(read_param https_port)
+  rp_admin=$(read_param admin_port)
+  rp_dbrootpass=$(read_param dbrootpass)
+  rp_dbadminpass=$(read_param dbadminpass)
 
   ### SET PASS AND PORTS ON CONFIG FILE
-  sed -i "s/npm_psswd/$npmpasswd/g" ./reverse_proxy/config.json
+  sed -i "s/npm_psswd/$rp_adminpass/g" ./reverse_proxy/config.json
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
-  sed -i "s/npm_http_port/$rphttp/g" docker-compose.yaml
-  sed -i "s/npmrootpass/$npmrootpasswd/g" docker-compose.yaml
-  sed -i "s/npmpass/$npmpasswd/g" docker-compose.yaml
+  sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
+  sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
+  sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
+  sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
+  sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
 
   ### CREATE CONTAINER
   docker-compose up -d reverse_proxy_db
@@ -121,7 +124,7 @@ function reverse_proxy (){
 
   ### SUCCESS MESSAGE AND DEFAULT CONFIGURATION
   ip=$(hostname -I | awk {print'$1'})
-  echo "Your admin interface is deployed on http://"$ip":"$npmadminp
+  echo "Your admin interface is deployed on http://"$ip":"$rp_admin
   echo "default login are : admin@example.com / changeme"
   pause
 }
@@ -204,6 +207,6 @@ Choose the TASK" 15 50 4 \
   done
   [ -f $INPUT ] && rm $INPUT
 }
-check_apps_dir
-check_config_file
+#check_apps_dir
+#check_config_file
 main_menu
