@@ -147,13 +147,15 @@ function openvpn (){
   ip=$(hostname -I | awk {print'$1'})
 
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
-  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u tcp://$ip
-  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn ovpn_init pki
-  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full $openvpn_username
-  docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
-
+  docker-compose run --rm openvpn ovpn_genconfig -u tcp://$ip
   pause
-  ### CREATE CONTAINER
+  docker-compose run --rm openvpn ovpn_initpki
+  pause
+  chown -R $USER: /srv/apps/openvpn
+  docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username nopass
+  pause
+  docker-compose run --rm openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
+  pause
   docker-compose up -d openvpn
   pause
 }
