@@ -64,7 +64,7 @@ function set_config (){
   sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
   sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
   sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
-  sed -i "s/openvpn_port/$openvpnp/g" docker-compose.yaml
+  sed -i "s/openvpn_port/$openvpn_port/g" docker-compose.yaml
 
 }
 
