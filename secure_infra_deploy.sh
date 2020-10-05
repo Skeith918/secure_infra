@@ -1,5 +1,6 @@
 #/bin/bash
 
+apt install dialog jq --quiet
 
 ## CREATE APPS CONFIG ROOT DIRECTORY
 
@@ -46,7 +47,7 @@ function check_config_file (){
     cp ./docker-compose.yaml.original ./docker-compose.yaml
     pause
   fi
-}
+}-
 ## CHECK IF INPUT PACKAGE IS INSTALLED
 function check_pkg(){
   check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
@@ -101,7 +102,6 @@ function docker_install () {
 function reverse_proxy (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
-  check_pkg jq
 
   rphttp=$(read_param rphttpp)
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
