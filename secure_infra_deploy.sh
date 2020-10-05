@@ -59,6 +59,13 @@ function set_config (){
   openvpn_port=$(read_param ovpn_port)
   openvpn_username=$(read_param client_username)
 
+  sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
+  sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
+  sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
+  sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
+  sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
+  sed -i "s/openvpn_port/$openvpnp/g" docker-compose.yaml
+
 }
 
 ## CHECK IF INPUT PACKAGE IS INSTALLED
@@ -119,11 +126,6 @@ function reverse_proxy (){
   ### SET PASS AND PORTS ON CONFIG FILE
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
   sed -i "s/npm_psswd/$rp_adminpass/g" /srv/apps/reverse_proxy/config.json
-  sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
-  sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
-  sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
-  sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
-  sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
 
   ### CREATE CONTAINER
   docker-compose up -d reverse_proxy_db
@@ -143,9 +145,6 @@ function openvpn (){
 
   ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
   ip=$(hostname -I | awk {print'$1'})
-
-  ### SET PORT ON CONFIG FILE
-  sed -i "s/openvpn_port/$openvpnp/g" docker-compose.yaml
 
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
   docker run -v /srv/apps/openvpn/data:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u tcp://$ip
