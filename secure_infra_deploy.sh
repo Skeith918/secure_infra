@@ -214,4 +214,5 @@ Choose the TASK" 15 50 4 \
 }
 check_apps_dir
 check_config_file
+set_config
 main_menu
