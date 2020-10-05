@@ -207,6 +207,6 @@ Choose the TASK" 15 50 4 \
   done
   [ -f $INPUT ] && rm $INPUT
 }
-#check_apps_dir
-#check_config_file
+check_apps_dir
+check_config_file
 main_menu
