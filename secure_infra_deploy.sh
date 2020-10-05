@@ -56,8 +56,8 @@ function set_config (){
   rp_admin=$(read_param reverse_proxy admin_port)
   rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
   rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
-  openvpn_port=$(read_param ovpn_port)
-  openvpn_username=$(read_param client_username)
+  openvpn_port=$(read_param openvpn ovpn_port)
+  openvpn_username=$(read_param openvpn client_username)
 
   sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
   sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
