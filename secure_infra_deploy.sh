@@ -144,8 +144,6 @@ function openvpn (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
   clear
-  ### RETRIEVE ALL INPUT VAR FOR PORTS AND PASS CONFIGURATION
-  ip=$(hostname -I | awk {print'$1'})
 
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
   docker-compose run --rm openvpn ovpn_genconfig -u tcp://$openvpn_ip:$openvpn_port -e 'port-share '$ip' '$rp_http''
@@ -154,11 +152,11 @@ function openvpn (){
   docker-compose run --rm openvpn ovpn_initpki
   pause
   chown -R $USER: /srv/apps/openvpn
-  docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username nopass
+  docker-compose up -d openvpn
+  pause
+  docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username
   pause
   docker-compose run --rm openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
-  pause
-  docker-compose up -d openvpn
   pause
 }
 
