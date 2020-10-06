@@ -145,6 +145,7 @@ function openvpn (){
   check_pkg docker
   clear
 
+  ip=$(hostname -I | awk {print'$1'})
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
   docker-compose run --rm openvpn ovpn_genconfig -u tcp://$openvpn_ip:$openvpn_port -e 'port-share '$ip' '$rp_http''
   touch /srv/apps/openvpn/data/vars

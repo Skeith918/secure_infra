@@ -34,7 +34,7 @@ services:
     container_name: openvpn
     restart: always
     ports:
-      - 'openvpn_port:80/tcp'
+      - 'openvpn_port:1194/tcp'
     volumes:
       - /srv/apps/openvpn/data:/etc/openvpn
     cap_add:
