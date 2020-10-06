@@ -9,6 +9,7 @@
     },
   "openvpn":
     {
+      "server_ip": "localhost",
       "ovpn_port": 80,
       "client_username": "test"
     },

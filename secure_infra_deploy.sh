@@ -56,6 +56,7 @@ function set_config (){
   rp_admin=$(read_param reverse_proxy admin_port)
   rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
   rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
+  openvpn_ip=$(read_param openvpn server_ip)
   openvpn_port=$(read_param openvpn ovpn_port)
   openvpn_username=$(read_param openvpn client_username)
 
@@ -147,7 +148,7 @@ function openvpn (){
   ip=$(hostname -I | awk {print'$1'})
 
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
-  docker-compose run --rm openvpn ovpn_genconfig -u tcp://$ip:$openvpn_port -e 'port-share '$ip' '$rp_http''
+  docker-compose run --rm openvpn ovpn_genconfig -u tcp://$openvpn_ip:$openvpn_port -e 'port-share '$ip' '$rp_http''
   touch /srv/apps/openvpn/data/vars
   pause
   docker-compose run --rm openvpn ovpn_initpki
