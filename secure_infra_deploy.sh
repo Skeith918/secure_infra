@@ -2,13 +2,40 @@
 
 apt install dialog jq -y
 
-## CREATE APPS CONFIG ROOT DIRECTORY
-
+## FUNCTION TO READ PARAMETERS ON CONFIG FILE
 function read_param (){
-  port=$(jq -r '.'$1'.'$2'' ./config/config.json)
-  echo $port
+  param=$(jq -r '.'$1'.'$2'' ./config/config.json)
+  echo $param
 }
 
+## RETRIEVE ALL PARAMETERS
+function set_param (){
+
+  rp_http=$(read_param reverse_proxy http_port)
+  rp_https=$(read_param reverse_proxy https_port)
+  rp_admin=$(read_param reverse_proxy admin_port)
+  rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
+  rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
+  openvpn_ip=$(read_param openvpn server_ip)
+  openvpn_port=$(read_param openvpn ovpn_port)
+  openvpn_username=$(read_param openvpn client_username)
+
+  sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
+  sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
+  sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
+  sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
+  sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
+  sed -i "s/openvpn_port/$openvpn_port/g" docker-compose.yaml
+
+}
+
+## PAUSE FUNCTION
+function pause(){
+  read -s -n 1 -p "Press any key to continue..."
+  echo ""
+}
+
+## CHECK IF CONFIG DIR FOR CONTAINER VOLUME EXIST
 function check_apps_dir (){
   for i in 'openvpn' 'reverse_proxy' 'openldap' 'lamp'
   do
@@ -47,28 +74,6 @@ function check_config_file (){
   fi
 }
 
-function set_config (){
-
-  ### RETRIEVE ALL VAR VALUES FOR PORTS AND PASS CONFIGURATION
-
-  rp_http=$(read_param reverse_proxy http_port)
-  rp_https=$(read_param reverse_proxy https_port)
-  rp_admin=$(read_param reverse_proxy admin_port)
-  rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
-  rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
-  openvpn_ip=$(read_param openvpn server_ip)
-  openvpn_port=$(read_param openvpn ovpn_port)
-  openvpn_username=$(read_param openvpn client_username)
-
-  sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
-  sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
-  sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
-  sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
-  sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
-  sed -i "s/openvpn_port/$openvpn_port/g" docker-compose.yaml
-
-}
-
 ## CHECK IF INPUT PACKAGE IS INSTALLED
 function check_pkg(){
   check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
@@ -92,12 +97,6 @@ function check_pkg(){
     done
     pause
 fi
-}
-
-## PAUSE FUNCTION
-function pause(){
-  read -s -n 1 -p "Press any key to continue..."
-  echo ""
 }
 
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
@@ -182,13 +181,6 @@ function lamp(){
   docker-compose up -d lamp_phpmyadmin
 }
 
-## INSTALL LDAP RADIUS SERVER
-function ldap_radius(){
-  echo "wip"
-  pause
-  main_menu
-}
-
 ## MAIN MENU
 function main_menu(){
   INPUT=/tmp/menu.sh.$$
@@ -222,5 +214,5 @@ Choose the TASK" 15 50 4 \
 }
 check_apps_dir
 check_config_file
-set_config
+set_param
 main_menu
