@@ -187,7 +187,7 @@ function main_menu(){
 
   while true
   do
-    dialog --clear  --help-button --backtitle "Docker Secure Infrastructure" \
+    dialog --clear  --help-button --backtitle "Dockerized Secure Infrastructure" \
     --title "[ M A I N - M E N U ]" \
     --menu "You can use the UP/DOWN arrow keys,or the \n\
 number keys 1-9 to choose an option.\n\
