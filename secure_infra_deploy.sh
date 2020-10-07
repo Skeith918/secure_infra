@@ -150,7 +150,7 @@ function reverse_proxy (){
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
   sed -i "s/npm_psswd/$rp_adminpass/g" /srv/apps/reverse_proxy/config.json
   sed -i "s/npm_db_port/$rp_db_port/g" /srv/apps/reverse_proxy/config.json
-  sed -i "s/host/$local_ip/g" /srv/apps/reverse_proxy/config.json
+  sed -i "s/srv_ip/$local_ip/g" /srv/apps/reverse_proxy/config.json
 
 
   ## CREATE CONTAINER

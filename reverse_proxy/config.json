@@ -1,7 +1,7 @@
 {
   "database": {
     "engine": "mysql",
-    "host": "host",
+    "host": "srv_ip",
     "name": "npm",
     "user": "npm",
     "password": "npm_passwd",
