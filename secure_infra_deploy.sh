@@ -10,7 +10,7 @@ function read_param (){
 
 ## RETRIEVE ALL PARAMETERS
 function set_param (){
-
+  clear
   rp_http=$(read_param reverse_proxy http_port)
   rp_https=$(read_param reverse_proxy https_port)
   rp_admin=$(read_param reverse_proxy admin_port)
@@ -50,6 +50,7 @@ function check_apps_dir (){
 
 ## CHECK IF CONTAINER CONFIG FILE ALREADY EXIST
 function check_config_file (){
+  clear
   if [ -f "./docker-compose.yaml" ];then
     while true
     do
@@ -76,6 +77,7 @@ function check_config_file (){
 
 ## CHECK IF INPUT PACKAGE IS INSTALLED
 function check_pkg(){
+  clear
   check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
   if [[ $check = "ii" ]]; then
     echo $1 "package is already installed"
