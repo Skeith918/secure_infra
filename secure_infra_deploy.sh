@@ -203,6 +203,8 @@ Choose the TASK" 15 50 4 \
     1 "Install Docker (required)" \
     2 "Install Reverse_Proxy" \
     3 "Install OpenVPN Server" \
+    4 "Install Port Knocking Architecture" \
+    5 "Install LNMP Architecture" \
     Exit "Exit to the shell" 2>"${INPUT}"
 
     menuitem=$(<"${INPUT}")
@@ -211,6 +213,8 @@ Choose the TASK" 15 50 4 \
 	1) docker_install;;
 	2) reverse_proxy;;
 	3) openvpn;;
+        4) port_knocking;;
+        5) lnmp;;
 	Exit) clear;echo "Bye"; break;;
     esac
   done
