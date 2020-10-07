@@ -1,0 +1,67 @@
+version: "3.8"
+services:
+## REVERSE PROXY (NGINX-PROXY-MANAGER)
+  reverse_proxy_app:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: reverse-proxy-app
+    restart: always
+    ports:
+      - '8080:80'
+      - '8043:443'
+      - '8081:81'
+    volumes:
+      - /srv/apps/reverse_proxy/config.json:/app/config/production.json
+      - /srv/apps/reverse_proxy/data:/data
+      - /srv/apps/reverse_proxy/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - reverse_proxy_db
+
+  reverse_proxy_db:
+    image: yobasystems/alpine-mariadb:latest
+    container_name: reverse-proxy-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootest"
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "npmtest"
+    volumes:
+      - /srv/apps/reverse_proxy/mysql:/var/lib/mysql
+
+## OPENVPN
+  openvpn:
+    image: kylemanna/openvpn:latest
+    container_name: openvpn
+    restart: always
+    ports:
+      - '80:1194/tcp'
+    volumes:
+      - /srv/apps/openvpn/data:/etc/openvpn
+    cap_add:
+      - NET_ADMIN
+
+## LAMP
+  #lamp_nginx:
+  #  image: nginx:latest
+  #  volumes:
+  #    - /srv/apps/nginx:/etc/nginx
+  #  ports:
+  #    - '8001:80'
+
+  #lamp_mariadb:
+  #  image: mariadb:latest
+  #  environment:
+  #    MYSQL_ROOT_PASSWORD: example
+
+  #phpmyadmin:
+  #  image: phpmyadmin:latest
+  #  restart: always
+  #  ports:
+  #    - '8002:80'
+  #  environment:
+  #    PMA_ARBITRARY=lamp_mariadb
+
+## OPENLDAP
+  #ldap_server:
+
+## RADIUS

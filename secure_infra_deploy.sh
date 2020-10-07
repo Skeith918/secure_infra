@@ -81,12 +81,12 @@ function check_pkg(){
   check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
   if [[ $check = "ii" ]]; then
     echo $1 "package is already installed"
+    pause
   else
     if [[ $1 = "docker" || $1 = "docker-compose" ]]; then
       echo "docker and docker-compose require to be installed via main menu"
       echo "Back to main menu"...
       pause
-      exit
     else
       while true
       do
@@ -107,6 +107,14 @@ function check_pkg(){
     fi
     pause
 fi
+}
+
+function test_chpkg(){
+  clear
+  read -r -p "Enter package name to test : " input
+  echo "you want to test "$input
+  pause
+  check_pkg $input
 }
 
 ## INSTALL DOCKER AND DOCKER-COMPOSE PACKAGE
@@ -197,16 +205,15 @@ function main_menu(){
 
   while true
   do
-    dialog --clear  --help-button --backtitle "Dockerized Secure Infrastructure" \
+    dialog --clear --backtitle "Dockerized Secure Infrastructure" \
     --title "[ M A I N - M E N U ]" \
     --menu "You can use the UP/DOWN arrow keys,or the \n\
 number keys 1-9 to choose an option.\n\
-Choose the TASK" 15 50 4 \
+Choose the TASK" 15 50 7 \
     1 "Install Docker (required)" \
     2 "Install Reverse_Proxy" \
     3 "Install OpenVPN Server" \
-    4 "Install Port Knocking Architecture" \
-    5 "Install LNMP Architecture" \
+    4 "Test CHECK_PKG" \
     Exit "Exit to the shell" 2>"${INPUT}"
 
     menuitem=$(<"${INPUT}")
@@ -215,8 +222,7 @@ Choose the TASK" 15 50 4 \
 	1) docker_install;;
 	2) reverse_proxy;;
 	3) openvpn;;
-        4) port_knocking;;
-        5) lnmp;;
+        4) test_chpkg;;
 	Exit) clear;echo "Bye"; break;;
     esac
   done
