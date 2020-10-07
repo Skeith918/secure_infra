@@ -11,11 +11,12 @@ function read_param (){
 ## RETRIEVE ALL PARAMETERS
 function set_param (){
   clear
-  rp_http=$(read_param reverse_proxy http_port)
-  rp_https=$(read_param reverse_proxy https_port)
-  rp_admin=$(read_param reverse_proxy admin_port)
-  rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
-  rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
+  rp_http=$(read_param reverse_proxy npm_http_port)
+  rp_https=$(read_param reverse_proxy npm_https_port)
+  rp_admin=$(read_param reverse_proxy npm_admin_port)
+  rp_db_port=$(read_param reverse_proxy npm_db_port)
+  rp_dbrootpass=$(read_param reverse_proxy npm_dbrootpass)
+  rp_dbadminpass=$(read_param reverse_proxy npm_dbadminpass)
   server_ip=$(read_param openvpn server_ip)
   openvpn_admin=$(read_param openvpn ovpn_admin)
   openvpn_port=$(read_param openvpn ovpn_port)
@@ -24,6 +25,7 @@ function set_param (){
   sed -i "s/npm_http_port/$rp_http/g" docker-compose.yaml
   sed -i "s/npm_https_port/$rp_https/g" docker-compose.yaml
   sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
+  sed -i "s/npm_db_port/$rp_db_port/g" docker-compose.yaml
   sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
   sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
   sed -i "s/openvpn_admin/$openvpn_admin/g" docker-compose.yaml

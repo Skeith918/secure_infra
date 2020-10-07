@@ -1,18 +1,19 @@
 {
   "reverse_proxy":
     {
-      "http_port": 8080,
-      "https_port": 8043,
-      "admin_port": 8081,
-      "dbrootpass": "rootest",
-      "dbadminpass": "npmtest"
+      "npm_http_port": 8080,
+      "npm_https_port": 8043,
+      "npm_admin_port": 8081,
+      "npm_db_port": 3386,
+      "npm_dbrootpass": "rootest",
+      "npm_dbadminpass": "npmtest"
     },
   "openvpn":
     {
       "server_ip": "localhost",
       "ovpn_admin": 943,
       "ovpn_port": 80,
-      "client_username": "test"
+      "ovpn_client_username": "test"
     },
   "port_knocking":
     {

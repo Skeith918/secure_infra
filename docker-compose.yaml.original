@@ -25,6 +25,8 @@ services:
       MYSQL_DATABASE: "npm"
       MYSQL_USER: "npm"
       MYSQL_PASSWORD: "npmpass"
+    ports:
+      - 'npm_db_port:3306'
     volumes:
       - /srv/apps/reverse_proxy/mysql:/var/lib/mysql
 
