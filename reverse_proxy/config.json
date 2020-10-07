@@ -1,10 +1,10 @@
 {
   "database": {
     "engine": "mysql",
-    "host": "db",
+    "host": "host",
     "name": "npm",
     "user": "npm",
-    "password": npm_passwd,
+    "password": "npm_passwd",
     "port": npm_db_port
   }
 }
