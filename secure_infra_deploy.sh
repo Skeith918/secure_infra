@@ -148,6 +148,7 @@ function reverse_proxy (){
    ## SET PASS AND PORTS ON CONFIG FILE
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
   sed -i "s/npm_psswd/$rp_adminpass/g" /srv/apps/reverse_proxy/config.json
+  sed -i "s/npm_db_port/$rp_db_port/g" /srv/apps/reverse_proxy/config.json
 
   ## CREATE CONTAINER
   docker-compose up -d reverse_proxy_db

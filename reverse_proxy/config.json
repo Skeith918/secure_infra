@@ -5,6 +5,6 @@
     "name": "npm",
     "user": "npm",
     "password": npm_passwd,
-    "port": 3306
+    "port": npm_db_port
   }
 }
