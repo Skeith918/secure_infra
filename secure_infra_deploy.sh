@@ -81,9 +81,8 @@ function check_pkg(){
   check=$(dpkg -l | grep $1 | tail -n1 | awk {print'$1'})
   if [[ $check = "ii" ]]; then
     echo $1 "package is already installed"
-    pause
   else
-    if [[ $1 = "docker" || $1 = "docker-compose" ]]; then
+    if [[ $1 = "docker" || $1 = "docker-ce" ]]; then
       echo "docker and docker-compose require to be installed via main menu"
       echo "Back to main menu"...
       pause
@@ -140,7 +139,7 @@ function reverse_proxy (){
   clear
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
-  check_pkg docker-compose
+  check_pkg docker-ce
 
    ## SET PASS AND PORTS ON CONFIG FILE
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
@@ -160,7 +159,7 @@ function reverse_proxy (){
 function openvpn (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
-  check_pkg docker-compose
+  check_pkg docker-ce
   clear
 
   #ip=$(hostname -I | awk {print'$1'})
