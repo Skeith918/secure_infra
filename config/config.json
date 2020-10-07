@@ -10,6 +10,7 @@
   "openvpn":
     {
       "server_ip": "localhost",
+      "ovpn_admin": 943,
       "ovpn_port": 80,
       "client_username": "test"
     },
@@ -18,10 +19,5 @@
       "portkn1": 8001,
       "portkn2": 8002,
       "portkn3": 8003
-    },
-   "openldap_radius":
-    {
-      "openldap_port": 7001,
-      "radius_port": 7002
     }
 }

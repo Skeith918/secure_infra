@@ -16,7 +16,7 @@ function set_param (){
   rp_admin=$(read_param reverse_proxy admin_port)
   rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
   rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
-  openvpn_ip=$(read_param openvpn server_ip)
+  server_ip=$(read_param openvpn server_ip)
   openvpn_port=$(read_param openvpn ovpn_port)
   openvpn_username=$(read_param openvpn client_username)
 
@@ -160,21 +160,23 @@ function reverse_proxy (){
 function openvpn (){
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
+  check_pkg docker-compose
   clear
 
-  ip=$(hostname -I | awk {print'$1'})
+  #ip=$(hostname -I | awk {print'$1'})
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
-  docker-compose run --rm openvpn ovpn_genconfig -u tcp://$openvpn_ip:$openvpn_port -e 'port-share '$ip' '$rp_http''
-  touch /srv/apps/openvpn/data/vars
-  pause
-  docker-compose run --rm openvpn ovpn_initpki
-  pause
-  chown -R $USER: /srv/apps/openvpn
+  #docker-compose run --rm openvpn ovpn_genconfig -u tcp://$openvpn_ip:$openvpn_port -e 'port-share '$ip' '$rp_http''
+  #touch /srv/apps/openvpn/data/vars
+  #pause
+  #docker-compose run --rm openvpn ovpn_initpki
+  #pause
+  #chown -R $USER: /srv/apps/openvpn
+  #docker-compose up -d openvpn
+  #pause
+  #docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username
+  #pause
+  #docker-compose run --rm openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
   docker-compose up -d openvpn
-  pause
-  docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username
-  pause
-  docker-compose run --rm openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
   pause
 }
 
@@ -190,7 +192,7 @@ function pknocking(){
 }
 
 ## INSTALL LAMP INFRASTRUCTURE
-function lamp(){
+function lnmp(){
   read -r "$nginxp" -p "set nginx exposed port: " input
   nginxp="${input:-$nginxp}"
 

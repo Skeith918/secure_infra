@@ -30,15 +30,16 @@ services:
 
 ## OPENVPN
   openvpn:
-    image: kylemanna/openvpn:latest
+    image: linuxserver/openvpn-as:latest
     container_name: openvpn
-    restart: always
-    ports:
-      - 'openvpn_port:1194/tcp'
-    volumes:
-      - /srv/apps/openvpn/data:/etc/openvpn
+    restart: unless-stopped
     cap_add:
       - NET_ADMIN
+    ports:
+      - 'openvpn_admin:943'
+      - 'openvpn_port:9443'
+    volumes:
+      - /srv/apps/openvpn/data:/config
 
 ## LAMP
   #lamp_nginx:
