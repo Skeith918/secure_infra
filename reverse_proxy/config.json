@@ -4,7 +4,7 @@
     "host": "srv_ip",
     "name": "npm",
     "user": "npm",
-    "password": "npm_passwd",
+    "password": "npm_adminpasswd",
     "port": npm_db_port
   }
 }
