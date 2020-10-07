@@ -41,7 +41,7 @@ services:
     volumes:
       - /srv/apps/openvpn/data:/config
 
-## LAMP
+## LNMP
   #lamp_nginx:
   #  image: nginx:latest
   #  volumes:
@@ -61,8 +61,3 @@ services:
   #    - '8002:80'
   #  environment:
   #    PMA_ARBITRARY=lamp_mariadb
-
-## OPENLDAP
-  #ldap_server:
-
-## RADIUS

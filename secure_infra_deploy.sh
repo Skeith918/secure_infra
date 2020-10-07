@@ -17,6 +17,7 @@ function set_param (){
   rp_dbrootpass=$(read_param reverse_proxy dbrootpass)
   rp_dbadminpass=$(read_param reverse_proxy dbadminpass)
   server_ip=$(read_param openvpn server_ip)
+  openvpn_admin=$(read_param openvpn ovpn_admin)
   openvpn_port=$(read_param openvpn ovpn_port)
   openvpn_username=$(read_param openvpn client_username)
 
@@ -25,6 +26,7 @@ function set_param (){
   sed -i "s/npm_admin_port/$rp_admin/g" docker-compose.yaml
   sed -i "s/npmrootpass/$rp_dbrootpass/g" docker-compose.yaml
   sed -i "s/npmpass/$rp_dbadminpass/g" docker-compose.yaml
+  sed -i "s/openvpn_admin/$openvpn_admin/g" docker-compose.yaml
   sed -i "s/openvpn_port/$openvpn_port/g" docker-compose.yaml
 
 }
