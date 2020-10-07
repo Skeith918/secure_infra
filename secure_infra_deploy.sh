@@ -82,10 +82,16 @@ function check_pkg(){
   if [[ $check = "ii" ]]; then
     echo $1 "package is already installed"
   else
-    while true
-    do
-      echo $1" isn't installed.."
-      read -r -p "Do you want install it ? [Yes/No]" input
+    if [[ $1 = "docker" || $1 = "docker-compose" ]]; then
+      echo "docker and docker-compose require to be installed via main menu"
+      echo "Back to main menu"...
+      pause
+      exit
+    else
+      while true
+      do
+        echo $1" isn't installed.."
+        read -r -p "Do you want install it ? [Yes/No]" input
         case $input in [yY][eE][sS]|[yY])
           apt install $1 -y
         break
@@ -98,6 +104,7 @@ function check_pkg(){
         ;;
         esac
     done
+    fi
     pause
 fi
 }
@@ -125,6 +132,7 @@ function reverse_proxy (){
   clear
   ### CHECK IF DOCKER IS INSTALLED
   check_pkg docker
+  check_pkg docker-compose
 
    ## SET PASS AND PORTS ON CONFIG FILE
   cp ./reverse_proxy/config.json /srv/apps/reverse_proxy/config.json
@@ -135,8 +143,7 @@ function reverse_proxy (){
   docker-compose up -d reverse_proxy_app
 
   ### SUCCESS MESSAGE AND DEFAULT CONFIGURATION
-  ip=$(hostname -I | awk {print'$1'})
-  echo "Your admin interface is deployed on http://"$ip":"$rp_admin
+  echo "Your admin interface is deployed on http://"$server_ip":"$rp_admin
   echo "default login are : admin@example.com / changeme"
   pause
 }
