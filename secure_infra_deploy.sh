@@ -174,7 +174,7 @@ function openvpn (){
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
   touch /srv/apps/openvpn/data/vars
   chown -R $USER: /srv/apps/openvpn
-  docker-compose run --rm openvpn ovpn_genconfig ovpn_genconfig -u tcp://$server_ip:$openvpn_port -e 'port-share '$ip' '$rp_http
+  docker-compose run --rm openvpn ovpn_genconfig -u tcp://$server_ip:$openvpn_port -e 'port-share '$ip' '$rp_http
   docker-compose run --rm openvpn ovpn_initpki
   docker-compose up -d openvpn
   docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username
