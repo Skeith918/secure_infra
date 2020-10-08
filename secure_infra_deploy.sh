@@ -170,20 +170,15 @@ function openvpn (){
   check_pkg docker-ce
   clear
 
-  #ip=$(hostname -I | awk {print'$1'})
+  ip=$(hostname -I | awk {print'$1'})
   ### CONFIGURE SERVER AND GENERATE CLIENT FILE
-  #docker-compose run --rm openvpn ovpn_genconfig -u tcp://$openvpn_ip:$openvpn_port -e 'port-share '$ip' '$rp_http''
-  #touch /srv/apps/openvpn/data/vars
-  #pause
-  #docker-compose run --rm openvpn ovpn_initpki
-  #pause
-  #chown -R $USER: /srv/apps/openvpn
-  #docker-compose up -d openvpn
-  #pause
-  #docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username
-  #pause
-  #docker-compose run --rm openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
+  touch /srv/apps/openvpn/data/vars
+  chown -R $USER: /srv/apps/openvpn
+  docker-compose run --rm openvpn ovpn_genconfig ovpn_genconfig -u tcp://$server_ip:$openvpn_port -e 'port-share '$ip' '$rp_http
+  docker-compose run --rm openvpn ovpn_initpki
   docker-compose up -d openvpn
+  docker-compose run --rm openvpn easyrsa build-client-full $openvpn_username
+  docker-compose run --rm openvpn ovpn_getclient $openvpn_username > $openvpn_username.ovpn
   pause
 }
 
